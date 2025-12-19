@@ -9,6 +9,8 @@ class SupabaseTableName(Enum):
     PRODUCTS = "products"
     ORDERS = "orders"
     PROCESS_ROUTINGS = "process_routings"
+    EQUIPMENTS = "equipments"
+    EQUIPMENT_GROUPS = "equipment_groups"
     EQUIPMENT_GROUP_MEMBERS = "equipment_group_members"
     PRODUCTION_SCHEDULES = "production_schedules"
     # Add more table names as needed

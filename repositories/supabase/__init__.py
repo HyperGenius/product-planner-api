@@ -1,6 +1,15 @@
 # repositories/supabase/__init__.py
-from .master_repo import MasterRepository
-from .order_repo import OrderRepository
-from .schedule_repo import ScheduleRepository
+from .common import SupabaseTableName
+from .master import EquipmentRepository, ProductRepository
+from .transaction import ScheduleRepository, OrderRepository
 
-all = ["MasterRepository", "OrderRepository"]
+__all__ = [
+    # common
+    "SupabaseTableName",
+    # master
+    "EquipmentRepository",
+    "ProductRepository",
+    # transaction
+    "ScheduleRepository",
+    "OrderRepository",
+]
