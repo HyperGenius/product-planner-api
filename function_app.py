@@ -12,6 +12,7 @@ prod_planner_api = FastAPI(
     title="Product Planner API",
     description="API for product planning and scheduling using Supabase as the backend.",
     version="1.0.0",
+    root_path="/api",
 )
 
 # TODO: 例外ハンドラーの追加
@@ -22,7 +23,7 @@ prod_planner_api.include_router(product_router)
 
 
 @prod_planner_api.get("/health", tags=["Health"])
-async def root():
+async def health():
     return {"message": "Product Planner API"}
 
 
@@ -30,5 +31,5 @@ app = func.FunctionApp()
 
 
 @app.route(route="{*route}", auth_level=func.AuthLevel.ANONYMOUS)
-def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
-    return func.AsgiMiddleware(prod_planner_api).handle(req, context)
+async def main(req: func.HttpRequest, context: func.Context) -> func.HttpResponse:
+    return await func.AsgiMiddleware(prod_planner_api).handle_async(req, context)

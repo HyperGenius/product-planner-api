@@ -1,6 +1,10 @@
 # repositories/supabase/common/base_repo.py
 from typing import List, Dict, Any, Optional
 from supabase import Client
+from utils.logger import get_logger
+
+
+logger = get_logger(__name__)
 
 
 class BaseRepository:
@@ -13,11 +17,13 @@ class BaseRepository:
 
     def get_all(self) -> List[Dict[str, Any]]:
         """全件取得"""
+        logger.info(f"Fetching all records from {self.table_name}")
         res = self.client.table(self.table_name).select("*").execute()
         return res.data or []
 
     def get_by_id(self, id: int) -> Optional[Dict[str, Any]]:
         """ID指定で1件取得"""
+        logger.info(f"Fetching record {id} from {self.table_name}")
         res = (
             self.client.table(self.table_name)
             .select("*")
@@ -29,6 +35,7 @@ class BaseRepository:
 
     def create(self, data: Dict[str, Any]) -> Dict[str, Any]:
         """新規作成 (Create)"""
+        logger.info(f"Creating record in {self.table_name}")
         # select()を付けることで、生成されたIDを含むデータを返す
         res = (
             self.client.table(self.table_name).insert(data).select().single().execute()
@@ -37,6 +44,7 @@ class BaseRepository:
 
     def update(self, id: int, data: Dict[str, Any]) -> Dict[str, Any]:
         """更新 (Update / Patch) - 指定したフィールドのみ更新される"""
+        logger.info(f"Updating record {id} in {self.table_name}")
         res = (
             self.client.table(self.table_name)
             .update(data)
@@ -49,6 +57,7 @@ class BaseRepository:
 
     def delete(self, id: int) -> bool:
         """削除 (Delete)"""
+        logger.info(f"Deleting record {id} from {self.table_name}")
         # count="exact" で削除された行数を確認できる
         res = (
             self.client.table(self.table_name)
