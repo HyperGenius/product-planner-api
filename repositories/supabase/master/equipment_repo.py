@@ -66,11 +66,27 @@ class EquipmentRepository(BaseRepository):
 
     def add_machine_to_group(self, group_id: int, equipment_id: int):
         """グループに機械を追加"""
-        return (
-            self.client.table(SupabaseTableName.EQUIPMENT_GROUP_MEMBERS.value)
-            .insert({"equipment_group_id": group_id, "equipment_id": equipment_id})
-            .execute()
-        )
+        try:
+            response = (
+                self.client.table(SupabaseTableName.EQUIPMENT_GROUP_MEMBERS.value)
+                .insert(
+                    {
+                        "equipment_group_id": group_id,
+                        "equipment_id": equipment_id,
+                    }
+                )
+                .execute()
+            )
+            return response.data
+
+        except APIError as e:
+            # Postgresの重複エラーコードは "23505"
+            if e.code == "23505" or "duplicate key" in e.message:
+                # 重複エラーの場合、Noneを返してルーター側で409を返す
+                return None
+
+            # 想定外のエラーはそのまま上に投げる
+            raise e
 
     def remove_machine_from_group(self, group_id: int, equipment_id: int):
         """グループから機械を削除"""

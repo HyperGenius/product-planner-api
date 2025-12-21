@@ -65,10 +65,10 @@ class TestProductRouter:
     def test_create_product(self, mock_repo):
         """POST /: 新規作成のテスト"""
         tenant_id_str = str(uuid.uuid4())
+        headers = {"x-tenant-id": tenant_id_str}
         payload = {
             "name": "New Product",
             "code": "NP001",
-            "tenant_id": tenant_id_str,
             "type": "standard",
         }
         # 保存後に返される想定のデータ
@@ -76,7 +76,7 @@ class TestProductRouter:
 
         mock_repo.create.return_value = created_data
 
-        response = client.post("/products/", json=payload)
+        response = client.post("/products/", json=payload, headers=headers)
 
         assert response.status_code == 200
         assert response.json() == created_data
@@ -91,7 +91,11 @@ class TestProductRouter:
         """PATCH /{id}: 更新のテスト"""
         product_id = 1
         payload = {"name": "Updated Name"}
-        updated_data = {"id": product_id, "name": "Updated Name", "code": "P001"}
+        updated_data = {
+            "id": product_id,
+            "name": "Updated Name",
+            "code": "P001",
+        }
 
         mock_repo.update.return_value = updated_data
 

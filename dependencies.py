@@ -1,6 +1,6 @@
 # dependencies.py
 import os
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, Header, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from supabase import create_client, Client, ClientOptions
 from repositories.supabase import (
@@ -19,6 +19,11 @@ def get_current_user_token(
 ) -> str:
     """Authorizationヘッダーからトークンを取り出す"""
     return credentials.credentials
+
+
+def get_current_tenant_id(x_tenant_id: str = Header(...)) -> str:
+    """テナントIDを取得する"""
+    return x_tenant_id
 
 
 def get_supabase_client(token: str = Depends(get_current_user_token)) -> Client:

@@ -5,13 +5,25 @@ from typing import Optional
 from uuid import UUID
 
 
-class ProductCreateSchema(BaseSchema):
-    """製品を作成するためのスキーマ"""
+# --- Products ---
+class ProductBase(BaseSchema):
+    """製品のベーススキーマ"""
 
     name: str = Field(default=..., description="製品名")
     code: str = Field(default=..., description="製品コード")
-    tenant_id: UUID = Field(default=..., description="テナントID")
     type: str = Field(default=..., description="製品種別")
+
+
+class ProductCreateSchema(ProductBase):
+    """製品を作成するためのスキーマ"""
+
+    pass
+
+
+class Product(ProductBase):
+    """読み取り用製品のスキーマ"""
+
+    id: int
 
 
 class ProductUpdateSchema(BaseSchema):
@@ -26,7 +38,6 @@ class ProductUpdateSchema(BaseSchema):
 class RoutingCreate(BaseSchema):
     """製品の工程を新規作成するためのスキーマ"""
 
-    tenant_id: UUID = Field(default=..., description="テナントID")
     product_id: int = Field(default=..., description="製品ID")
     sequence_order: int = Field(default=..., description="シーケンス番号")
     process_name: str = Field(default=..., description="工程名")

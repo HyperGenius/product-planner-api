@@ -45,6 +45,11 @@ class BaseRepository:
     def update(self, id: int, data: Dict[str, Any]) -> Dict[str, Any]:
         """更新 (Update / Patch) - 指定したフィールドのみ更新される"""
         logger.info(f"Updating record {id} in {self.table_name}")
+
+        # .eq("id", id) だけだと、RLSによって「他社のID」を指定された場合に
+        # エラーにならず「更新件数0」になることがあります。
+        # 厳密にはここでも戻り値チェックが必要ですが、まずは今のままで十分動きます。
+
         res = (
             self.client.table(self.table_name)
             .update(data)

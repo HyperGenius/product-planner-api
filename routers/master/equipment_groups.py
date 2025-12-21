@@ -5,7 +5,7 @@ from models.master.equipment_schemas import (
     EquipmentGroupCreate,
     EquipmentGroupUpdate,
 )
-from dependencies import get_equipment_repo
+from dependencies import get_equipment_repo, get_current_tenant_id
 from utils.logger import get_logger
 
 equipment_group_router = APIRouter(
@@ -18,6 +18,7 @@ logger = get_logger(__name__)
 @equipment_group_router.post("/")
 def create_equipment_group(
     group_data: EquipmentGroupCreate,
+    tenant_id: str = Depends(get_current_tenant_id),
     repo: EquipmentRepository = Depends(get_equipment_repo),
 ):
     """設備グループを新規作成"""
