@@ -2,7 +2,6 @@
 from models.common.base_schema import BaseSchema
 from pydantic import Field
 from typing import Optional
-from uuid import UUID
 
 
 class RoutingCreate(BaseSchema):
