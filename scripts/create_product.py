@@ -14,8 +14,15 @@ def create_product():
     tenant_id = os.environ.get("TEST_TENANT_ID")
 
     if not test_user_email or not test_user_pass or not tenant_id:
-        # 環境変数が設定されていない場合は、エラーを投げて終了
-        print(f"{test_user_email=}, {test_user_pass=}, {tenant_id=}")
+        # 環境変数が設定されていない場合は、エラーを投げて終了（値はログに出さない）
+        missing_vars = []
+        if not test_user_email:
+            missing_vars.append("TEST_USER_EMAIL")
+        if not test_user_pass:
+            missing_vars.append("TEST_USER_PASS")
+        if not tenant_id:
+            missing_vars.append("TEST_TENANT_ID")
+        print(f"Missing environment variables: {', '.join(missing_vars)}")
         raise ValueError(
             "TEST_USER_EMAIL or TEST_USER_PASS or TEST_TENANT_ID is not set"
         )
@@ -33,7 +40,7 @@ def create_product():
 
     data = {
         "name": "Test Product",
-        "code": "TP-002",
+        "code": "TP-003",
         "type": "standard",
     }
 

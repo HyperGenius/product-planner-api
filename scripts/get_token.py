@@ -26,8 +26,6 @@ def get_access_token(email: str, password: str):
         print(f"{res.session.access_token}")
         return res.session.access_token
     except Exception as e:
-        print("email: ", email)
-        print("password: ", password)
         print(f"❌ Error: {e}")
 
 
