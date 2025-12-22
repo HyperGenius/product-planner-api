@@ -3,7 +3,6 @@ from repositories.supabase.master.product_repo import ProductRepository
 from models.master import RoutingCreate, RoutingUpdate
 from dependencies import get_product_repo, get_current_tenant_id
 from utils.logger import get_logger
-from typing import List
 
 process_routing_router = APIRouter(
     prefix="/process-routings", tags=["Master (Process Routings)"]
@@ -20,7 +19,7 @@ def create_process_routing(
 ):
     """工程順序を新規作成"""
     logger.info(f"Creating process routing {routing_data}")
-    return repo.create_routing(routing_data.model_dump())
+    return repo.create_routing(routing_data.with_tenant_id(tenant_id))
 
 
 @process_routing_router.get("/")

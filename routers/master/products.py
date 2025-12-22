@@ -18,7 +18,7 @@ def create_product(
 ):
     """製品を新規作成"""
     logger.info(f"Creating product {product_data}")
-    return repo.create(product_data.model_dump())
+    return repo.create(product_data.with_tenant_id(tenant_id))
 
 
 @product_router.get("/")

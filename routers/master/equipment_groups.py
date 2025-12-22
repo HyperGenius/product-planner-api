@@ -23,7 +23,7 @@ def create_equipment_group(
 ):
     """設備グループを新規作成"""
     logger.info(f"Creating equipment group {group_data}")
-    return repo.create_group(group_data.model_dump())
+    return repo.create_group(group_data.with_tenant_id(tenant_id))
 
 
 @equipment_group_router.get("/")

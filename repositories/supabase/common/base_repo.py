@@ -38,7 +38,7 @@ class BaseRepository:
         logger.info(f"Creating record in {self.table_name}")
         # select()を付けることで、生成されたIDを含むデータを返す
         res = (
-            self.client.table(self.table_name).insert(data).select().single().execute()
+            self.client.table(self.table_name).insert(data).execute()
         )
         return res.data
 

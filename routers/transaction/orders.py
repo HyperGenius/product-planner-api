@@ -20,7 +20,7 @@ def create_order(
 ):
     """注文を新規作成"""
     logger.info(f"Creating order {order_data}")
-    return repo.create(order_data.model_dump())
+    return repo.create(order_data.with_tenant_id(tenant_id))
 
 
 @orders_router.get("/")

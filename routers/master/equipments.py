@@ -20,7 +20,7 @@ def create_equipment(
 ):
     """設備を新規作成"""
     logger.info(f"Creating equipment {equipment_data}")
-    return repo.create(equipment_data.model_dump())
+    return repo.create(equipment_data.with_tenant_id(tenant_id))
 
 
 @equipment_router.get("/")

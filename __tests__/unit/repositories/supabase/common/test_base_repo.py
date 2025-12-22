@@ -44,7 +44,7 @@ class TestBaseRepository:
 
         # --- モックのセットアップ ---
         (
-            mock_client.table.return_value.insert.return_value.select.return_value.single.return_value.execute.return_value.data
+            mock_client.table.return_value.insert.return_value.execute.return_value.data
         ) = expected
 
         # --- 実行 ---
