@@ -47,6 +47,10 @@ disallow_incomplete_defs = false  # 不完全な型ヒントを禁止する
 check_untyped_defs = true         # 型ヒントのない関数もチェックする
 ignore_missing_imports = true     # 外部ライブラリの型定義がない場合の警告を抑制
 
+exclude = [
+    "scripts/.*",
+]
+
 [[tool.mypy.overrides]]
 module = ["supabase", "supabase.*", "gotrue.*", "postgrest.*"]
 ignore_errors = true
