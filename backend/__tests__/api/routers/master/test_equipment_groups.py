@@ -2,11 +2,10 @@
 from unittest.mock import MagicMock
 
 import pytest
-from app.dependencies import get_equipment_repo
-
-# テスト対象のAPIインスタンス
-from app.main import app
 from fastapi.testclient import TestClient
+
+from app.dependencies import get_equipment_repo
+from app.main import app
 
 # テストクライアントの作成
 client = TestClient(app)
@@ -115,3 +114,92 @@ class TestEquipmentGroupRouter:
 
         assert response.status_code == 404
         assert response.json()["detail"] == "Not found"
+
+    def test_add_equipment_to_group(self, headers, mock_repo):
+        """POST /{group_id}/members: 設備をグループに追加のテスト"""
+        group_id = 1
+        equipment_id = 10
+        payload = {
+            "equipment_id": equipment_id,
+        }
+        expected_data = {
+            "id": 1,
+            "equipment_group_id": group_id,
+            "equipment_id": equipment_id,
+        }
+
+        mock_repo.add_machine_to_group.return_value = expected_data
+
+        response = client.post(
+            f"/equipment-groups/{group_id}/members", json=payload, headers=headers
+        )
+
+        assert response.status_code == 200
+        assert response.json() == expected_data
+        mock_repo.add_machine_to_group.assert_called_with(group_id, equipment_id)
+
+    def test_add_equipment_to_group_duplicate(self, headers, mock_repo):
+        """POST /{group_id}/members: 重複追加時の409エラーテスト"""
+        group_id = 1
+        equipment_id = 10
+        payload = {
+            "equipment_id": equipment_id,
+        }
+
+        mock_repo.add_machine_to_group.return_value = None
+
+        response = client.post(
+            f"/equipment-groups/{group_id}/members", json=payload, headers=headers
+        )
+
+        assert response.status_code == 409
+        assert response.json()["detail"] == "Equipment already in group"
+
+    def test_remove_equipment_from_group(self, headers, mock_repo):
+        """DELETE /{group_id}/members/{equipment_id}: 設備をグループから削除のテスト"""
+        group_id = 1
+        equipment_id = 10
+
+        mock_result = MagicMock()
+        mock_result.count = 1
+        mock_repo.remove_machine_from_group.return_value = mock_result
+
+        response = client.delete(
+            f"/equipment-groups/{group_id}/members/{equipment_id}", headers=headers
+        )
+
+        assert response.status_code == 200
+        assert response.json() == {"status": "deleted"}
+        mock_repo.remove_machine_from_group.assert_called_with(group_id, equipment_id)
+
+    def test_remove_equipment_from_group_not_found(self, headers, mock_repo):
+        """DELETE /{group_id}/members/{equipment_id}: 存在しない紐付け削除時の404エラーテスト"""
+        group_id = 1
+        equipment_id = 999
+
+        mock_result = MagicMock()
+        mock_result.count = 0
+        mock_repo.remove_machine_from_group.return_value = mock_result
+
+        response = client.delete(
+            f"/equipment-groups/{group_id}/members/{equipment_id}", headers=headers
+        )
+
+        assert response.status_code == 404
+        assert response.json()["detail"] == "Not found"
+
+    def test_get_group_members(self, headers, mock_repo):
+        """GET /{group_id}/members: グループに所属する設備一覧取得のテスト"""
+        group_id = 1
+        expected_data = [
+            {"id": 1, "equipment_group_id": group_id, "equipment_id": 10},
+            {"id": 2, "equipment_group_id": group_id, "equipment_id": 11},
+        ]
+
+        mock_repo.get_members_by_group_id.return_value = expected_data
+
+        response = client.get(f"/equipment-groups/{group_id}/members", headers=headers)
+
+        assert response.status_code == 200
+        assert response.json() == expected_data
+        mock_repo.get_members_by_group_id.assert_called_with(group_id)
