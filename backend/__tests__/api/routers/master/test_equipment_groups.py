@@ -5,8 +5,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.dependencies import get_equipment_repo
-
-# テスト対象のAPIインスタンス
 from app.main import app
 
 # テストクライアントの作成
@@ -122,10 +120,13 @@ class TestEquipmentGroupRouter:
         group_id = 1
         equipment_id = 10
         payload = {
+            "equipment_id": equipment_id,
+        }
+        expected_data = {
+            "id": 1,
             "equipment_group_id": group_id,
             "equipment_id": equipment_id,
         }
-        expected_data = {"id": 1, **payload}
 
         mock_repo.add_machine_to_group.return_value = expected_data
 
@@ -142,7 +143,6 @@ class TestEquipmentGroupRouter:
         group_id = 1
         equipment_id = 10
         payload = {
-            "equipment_group_id": group_id,
             "equipment_id": equipment_id,
         }
 

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.dependencies import get_current_tenant_id, get_equipment_repo
 from app.models.master.equipment_schemas import (
     EquipmentGroupCreate,
-    EquipmentGroupMembersCreate,
+    EquipmentGroupMemberAdd,
     EquipmentGroupUpdate,
 )
 from app.repositories.supa_infra.master.equipment_repo import EquipmentRepository
@@ -76,7 +76,7 @@ def delete_equipment_group(
 @equipment_group_router.post("/{group_id}/members")
 def add_equipment_to_group(
     group_id: int,
-    member_data: EquipmentGroupMembersCreate,
+    member_data: EquipmentGroupMemberAdd,
     repo: EquipmentRepository = Depends(get_equipment_repo),
 ):
     """設備グループに設備を追加"""

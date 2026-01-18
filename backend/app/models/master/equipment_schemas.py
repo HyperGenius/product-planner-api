@@ -57,6 +57,12 @@ class EquipmentGroupMembersCreate(EquipmentGroupMembersBase):
     pass
 
 
+class EquipmentGroupMemberAdd(BaseSchema):
+    """設備グループに設備を追加するためのスキーマ（URLパスからgroup_idを取得するため）"""
+
+    equipment_id: int = Field(default=..., description="設備ID")
+
+
 class EquipmentGroupMembers(EquipmentGroupMembersBase):
     """読み取り用 (Response)"""
 
