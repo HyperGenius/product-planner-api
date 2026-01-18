@@ -98,3 +98,13 @@ class EquipmentRepository(BaseRepository[T]):
             .eq("equipment_id", equipment_id)
             .execute()
         )
+
+    def get_members_by_group_id(self, group_id: int) -> list[T]:
+        """設備グループに所属する設備一覧を取得"""
+        res = (
+            self.client.table(SupabaseTableName.EQUIPMENT_GROUP_MEMBERS.value)
+            .select("*")
+            .eq("equipment_group_id", group_id)
+            .execute()
+        )
+        return cast(list[T], res.data)
