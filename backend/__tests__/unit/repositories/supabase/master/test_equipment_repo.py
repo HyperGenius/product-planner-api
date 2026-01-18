@@ -2,7 +2,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from repositories.supa_infra import EquipmentRepository, SupabaseTableName
+from app.repositories.supa_infra import EquipmentRepository, SupabaseTableName
 
 
 @pytest.mark.unit

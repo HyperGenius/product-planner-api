@@ -6,7 +6,7 @@ from datetime import UTC, datetime
 from unittest.mock import MagicMock
 
 import pytest
-from scheduler_logic import schedule_order
+from app.scheduler_logic import schedule_order
 
 
 @pytest.mark.unit

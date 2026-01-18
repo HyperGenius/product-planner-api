@@ -2,14 +2,14 @@
 from unittest.mock import MagicMock
 
 import pytest
-from dependencies import get_product_repo
-from fastapi.testclient import TestClient
+from app.dependencies import get_product_repo
 
 # テスト対象のAPIインスタンス
-from function_app import prod_planner_api
+from app.main import product_planner_api as app
+from fastapi.testclient import TestClient
 
 # テストクライアントの作成
-client = TestClient(prod_planner_api)
+client = TestClient(app)
 
 
 @pytest.mark.api
@@ -27,9 +27,9 @@ class TestProcessRoutingRouter:
         """
         テスト実行中だけ get_product_repo を mock_repo に差し替える。
         """
-        prod_planner_api.dependency_overrides[get_product_repo] = lambda: mock_repo
+        app.dependency_overrides[get_product_repo] = lambda: mock_repo
         yield
-        prod_planner_api.dependency_overrides = {}
+        app.dependency_overrides = {}
 
     def test_get_process_routings(self, mock_repo):
         """GET /: 製品ID指定で取得のテスト"""
