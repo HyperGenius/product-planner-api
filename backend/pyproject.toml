@@ -62,3 +62,10 @@ addopts = "-ra -q"
 testpaths = [
     "__tests__",
 ]
+filterwarnings = [
+    # pyiceberg ライブラリ内部の非推奨警告を無視する
+    "ignore::DeprecationWarning:pyiceberg.*",
+    "ignore:.*PydanticDeprecatedSince212.*:DeprecationWarning:pyiceberg.*",
+    # storage3の古いPydantic記法への警告を無視する
+    "ignore:`pydantic.config.Extra` is deprecated:DeprecationWarning",
+]

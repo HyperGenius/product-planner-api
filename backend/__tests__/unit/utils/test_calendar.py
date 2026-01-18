@@ -5,7 +5,7 @@
 from datetime import datetime
 
 import pytest
-from utils.calendar import (
+from app.utils.calendar import (
     calculate_end_time,
     get_next_available_start_time,
     get_next_work_start,

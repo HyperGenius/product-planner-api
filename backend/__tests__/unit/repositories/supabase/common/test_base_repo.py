@@ -2,7 +2,7 @@
 from unittest.mock import MagicMock
 
 import pytest
-from repositories.supa_infra.common import BaseRepository
+from app.repositories.supa_infra.common import BaseRepository
 
 
 @pytest.mark.unit
