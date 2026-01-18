@@ -8,8 +8,8 @@ test
 .venv
 
 # 開発用
-scripts/**
+backend/scripts/**
 
 # 一時的に退避
-scheduler_logic.py
-routers/transaction/**
+backend/scheduler_logic.py
+backend/routers/transaction/**
